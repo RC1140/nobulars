@@ -8,6 +8,10 @@ nobulars is a command-line files download manager that helps you simple paste an
 
 [apps] <url_to_file>
 
+## how to run ##
+
+	node nobular.js
+
 ## reqs ##
 
-coming soon
+you need node and node-ncurses. that's all. (eventually, this should be installable via brew for Mac OS X)
