@@ -3,8 +3,16 @@
 // - tinkered by kenny shen, for pure pleasure and fun. 
 // - @kenny_shen, kenny@northpole.sg
 
-// welcome msg
-console.log('\n\n\n\n\n<<<   n_o_b_u_l_a_r   >>>\n\n\n\n\n');
+// nobular says hi.
+console.log("     ___           ___           ___           ___           ___       ___           ___     ");
+console.log("           /         /          ");
+console.log(" ___  ___ (___      (  ___  ___ ");
+console.log("|   )|   )|   )|   )| |   )|   )");
+console.log("|  / |__/ |__/ |__/ | |__/||    ");
+console.log("     ___           ___           ___           ___           ___       ___           ___     \n\n");
+
+// reqs
+var fs = require('fs');
 
 // confiks
 var spawn = require('./confik');
@@ -30,12 +38,52 @@ if(!(sub_pos == -1)) {
 
 // connect to target
 var http = require('http');
+
+// super ugly code
+var target_file = target.split("/").slice((target.split("/").length -1))[0]
+var target_host = target.split("/")[2]
+var target_path = target.split("/");
+target_path = target_path.slice(3);
+target_path = target_path.slice(0, target_path.length-1);
+target_path = "/" + target_path.join("/");
+
+var final_file_path = dir_info[0] + sub_dir + '/';
+
+
 var target_svr = http.createClient(80, target_host);
-var request = target_svr.request('GET', target_path, {'host': target_host});
+var request = target_svr.request('GET', (target_path+target_file), {'host': target_host});
+
+request.end();
+
+var final_dest = final_file_path + target_file;
+
+var final_fd = final_file_path + target_file;
+
+function fileWrite (filename, data) { return function (callback, errback) {
+  fs.open(filename, "w", 0666)(function (fd) {
+    var totalWritten = 0;
+    function doWrite (_data) {
+      fs.write(fd, _data, 0)(
+        function (written) {
+          totalWritten += written
+          if (totalWritten === _data.length) {
+            fs.close(fd);
+            callback(totalWritten);
+          } else {
+            doWrite(_data.slice(totalWritten));
+          }
+        }, errback);
+    }
+    doWrite(data);
+  }, errback);
+}}
+
+
 request.on('response', function(response) {
-	console.log();
 	response.on('data', function(chunk) {
+		console.log(chunk.length);
 		// write data to directory
+		fileWrite(final_fd, chunk);
 	});
 });
 
