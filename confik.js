@@ -3,7 +3,7 @@
 module.exports = spawn;
 
 var Nobularsity = {
-	master_dir: '/Users/renhuishen/Desktop/Kreybits/nobulars/downloads/',
+	master_dir: '/home/kenny/Kreybits/nobulars/downloads/',
 	sub_dirs: ['apps','anime','images','videos','pdfs'],
 	
 	warps: function() {

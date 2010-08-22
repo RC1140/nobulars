@@ -45,7 +45,7 @@ var target_host = target.split("/")[2]
 var target_path = target.split("/");
 target_path = target_path.slice(3);
 target_path = target_path.slice(0, target_path.length-1);
-target_path = "/" + target_path.join("/");
+target_path = "/" + target_path.join("/") + "/";
 
 var final_file_path = dir_info[0] + sub_dir + '/';
 
@@ -56,18 +56,17 @@ var request = target_svr.request('GET', (target_path+target_file), {'host': targ
 request.end();
 
 var final_fdd = final_file_path + target_file;
-var final_fd;
-
-fs.open(final_fdd, 'w', mode=0666, function(err, fd) {
-	final_fd = fd;
-});
-
 
 request.on('response', function(response) {
+	var mystream = fs.createWriteStream(final_fdd);
+	// no encoding set (aka defaults to buffer)
 	response.on('data', function(chunk) {
-		console.log(chunk.length);
 		// write data to directory
-		fs.write(final_fd, chunk, encoding='utf8');
+		mystream.write(chunk);
+	});
+	response.on('end', function() {
+		// close the stream on response end event
+		mystream.end();
 	});
 });
 
