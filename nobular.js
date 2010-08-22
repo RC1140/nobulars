@@ -55,36 +55,25 @@ var request = target_svr.request('GET', (target_path+target_file), {'host': targ
 
 request.end();
 
-var final_dest = final_file_path + target_file;
+var final_fdd = final_file_path + target_file;
+var final_fd;
 
-var final_fd = final_file_path + target_file;
-
-function fileWrite (filename, data) { return function (callback, errback) {
-  fs.open(filename, "w", 0666)(function (fd) {
-    var totalWritten = 0;
-    function doWrite (_data) {
-      fs.write(fd, _data, 0)(
-        function (written) {
-          totalWritten += written
-          if (totalWritten === _data.length) {
-            fs.close(fd);
-            callback(totalWritten);
-          } else {
-            doWrite(_data.slice(totalWritten));
-          }
-        }, errback);
-    }
-    doWrite(data);
-  }, errback);
-}}
+fs.open(final_fdd, 'w', mode=0666, function(err, fd) {
+	final_fd = fd;
+});
 
 
 request.on('response', function(response) {
 	response.on('data', function(chunk) {
 		console.log(chunk.length);
 		// write data to directory
-		fileWrite(final_fd, chunk);
+		fs.write(final_fd, chunk, encoding='utf8');
 	});
+});
+
+process.on('SIGINT', function() {
+	console.log('bye');
+	process.exit(0);
 });
 
 
