@@ -3,8 +3,8 @@
 module.exports = spawn;
 
 var Nobularsity = {
-	master_dir: '/home/kenny/Kreybits/nobulars/downloads/',
-	sub_dirs: ['apps','anime','images','videos','pdfs'],
+	master_dir: '/Users/renhuishen/Desktop/Kreybits/nobulars/downloads/',
+	sub_dirs: ['apps','anime','images','videos','pdfs','musik'], // define your own
 	
 	warps: function() {
 		return [this.master_dir, this.sub_dirs];

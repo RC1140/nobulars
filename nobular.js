@@ -68,7 +68,14 @@ request.on('response', function(response) {
 	response.on('end', function() {
 		// close the stream on response end event
 		mystream.end();
-		console.log('-__´ª•: your download has completed in the ' + sub_dir + ' folder.');	
+		exec = require('child_process').exec;
+		exec('clear', function(err, output) {
+			if(err) throw err;
+			console.log(output);
+		});
+		setTimeout(function() {
+			console.log('-__´ª•: your download has completed in the ' + sub_dir + ' folder.');	
+		}, 5000);
 	});
 });
 
