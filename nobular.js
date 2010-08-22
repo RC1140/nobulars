@@ -62,11 +62,13 @@ request.on('response', function(response) {
 	// no encoding set (aka defaults to buffer)
 	response.on('data', function(chunk) {
 		// write data to directory
+		console.log('-__´ª•: writing chunk - ' + chunk.length);
 		mystream.write(chunk);
 	});
 	response.on('end', function() {
 		// close the stream on response end event
 		mystream.end();
+		console.log('-__´ª•: your download has completed in the ' + sub_dir + ' folder.');	
 	});
 });
 
